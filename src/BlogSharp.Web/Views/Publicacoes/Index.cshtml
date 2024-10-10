@@ -1,0 +1,154 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<style>
+    /* Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+    }
+
+    header {
+        background-color: #1d1f21;
+        padding: 20px;
+    }
+
+        header .menu {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+        }
+
+            header .menu li {
+                margin: 0 15px;
+            }
+
+                header .menu li a {
+                    color: #fff;
+                    text-decoration: none;
+                    font-weight: bold;
+                }
+
+    .container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 40px;
+    }
+
+    .publication-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .publication-card {
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+        .publication-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .publication-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+    .card-content {
+        padding: 20px;
+    }
+
+    .tag {
+        background-color: #1d1f21;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: #2a2a2a;
+    }
+
+    .publication-description {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    footer {
+        text-align: center;
+        padding: 20px;
+        background-color: #1d1f21;
+        color: #fff;
+        margin-top: 40px;
+    }
+
+</style >
+
+<body>
+    <header>
+        <nav>
+            <ul class="menu">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Publicações</a></li>
+                <li><a href="#">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Publicações</h1>
+        <div class="publication-grid">
+            <!-- Publicação 1 -->
+            <div class="publication-card">
+                <img src="https://via.placeholder.com/300x200" alt="Imagem Publicação 1">
+                <div class="card-content">
+                    <span class="tag">Programação</span>
+                    <h2>Título da Publicação 1</h2>
+                    <p>Autor: João Silva</p>
+                    <p class="publication-description">Este artigo aborda técnicas avançadas de JavaScript para desenvolvedores experientes...</p>
+                </div>
+            </div>
+
+            <!-- Publicação 2 -->
+            <div class="publication-card">
+                <img src="https://via.placeholder.com/300x200" alt="Imagem Publicação 2">
+                <div class="card-content">
+                    <span class="tag">Front-end</span>
+                    <h2>Título da Publicação 2</h2>
+                    <p>Autor: Maria Souza</p>
+                    <p class="publication-description">Neste artigo, exploramos as melhores práticas de design responsivo usando CSS Grid...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 Blog de Programadores</p>
+    </footer>
+</body>
