@@ -66,7 +66,7 @@ A estrutura do projeto é organizada da seguinte forma:
 ### **Passos para Execução**
 
 1. **Clone o Repositório:**
-   - `git clone https://github.com/seu-usuario/nome-do-repositorio.git`
+   - `git clone https://github.com/VictorBGL/BlogSharp.git`
    - `cd nome-do-repositorio`
 
 2. **Configuração do Banco de Dados:**
