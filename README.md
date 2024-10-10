@@ -67,7 +67,7 @@ A estrutura do projeto é organizada da seguinte forma:
 
 1. **Clone o Repositório:**
    - `git clone https://github.com/VictorBGL/BlogSharp.git`
-   - `cd nome-do-repositorio`
+   - `cd BlogSharp`
 
 2. **Configuração do Banco de Dados:**
    - No arquivo `appsettings.json`, configure a string de conexão do SQL Server.
