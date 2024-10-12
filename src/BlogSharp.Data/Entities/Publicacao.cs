@@ -2,6 +2,15 @@
 {
     public class Publicacao
     {
+        public Publicacao(string titulo, string descricao, string? imagem, Guid autorId) 
+        {
+            Titulo = titulo;
+            Descricao = descricao; 
+            Imagem = imagem;
+            AutorId = autorId;
+            DataPublicacao = DateTime.Now;
+        }
+
         public Guid Id { get; private set; }
         public string Titulo { get; private set; }
         public string Descricao { get; private set; }
