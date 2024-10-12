@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogSharp.Api", "src\BlogSh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogSharp.Data", "src\BlogSharp.Data\BlogSharp.Data.csproj", "{13E3A077-4F36-4352-8EC9-81B04689A16A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogSharp.Web", "src\BlogSharp.Web\BlogSharp.Web.csproj", "{95AF3DD8-BBE2-4B66-B3E5-7A40C5C1F1C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{13E3A077-4F36-4352-8EC9-81B04689A16A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13E3A077-4F36-4352-8EC9-81B04689A16A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13E3A077-4F36-4352-8EC9-81B04689A16A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95AF3DD8-BBE2-4B66-B3E5-7A40C5C1F1C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95AF3DD8-BBE2-4B66-B3E5-7A40C5C1F1C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95AF3DD8-BBE2-4B66-B3E5-7A40C5C1F1C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95AF3DD8-BBE2-4B66-B3E5-7A40C5C1F1C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
