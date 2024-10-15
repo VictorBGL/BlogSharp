@@ -1,10 +1,10 @@
-﻿using BlogSharp.Data.Data;
+﻿using AutoMapper;
+using BlogSharp.Data.Data;
 using BlogSharp.Data.Entities;
-using BlogSharp.Data.Interfaces;
 using BlogSharp.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogSharp.Web.Controllers
 {
@@ -12,17 +12,23 @@ namespace BlogSharp.Web.Controllers
     {
         private readonly ApiDbContext _context;
         private readonly IHttpContextAccessor _accessor;
+        private readonly IMapper _mapper;
 
         public PublicacoesController(
-            ApiDbContext context, IHttpContextAccessor accessor)
+            ApiDbContext context, IHttpContextAccessor accessor, IMapper mapper)
         {
             _context = context;
             _accessor = accessor;
+            _mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var publicacoes = await _context.Publicacoes.Include(p => p.Autor).OrderBy(p => p.DataPublicacao).ToListAsync();
+
+            var resultado = _mapper.Map<List<PublicacaoResponseModel>>(publicacoes);
+
+            return View(resultado);
         }
 
         public IActionResult Create()
@@ -35,9 +41,9 @@ namespace BlogSharp.Web.Controllers
         [Authorize]
         public async Task<IActionResult> Create(PublicacaoModel model)
         {
-            var usuarioId = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var publicacao = _mapper.Map<Publicacao>(model);
 
-            var publicacao = new Publicacao(model.Titulo, model.Descricao, model.Imagem, Guid.Parse(usuarioId));
+            publicacao.CriarPublicacao(Guid.Parse("E30048E7-B57F-428C-9251-D7FCC88B4669"));
 
             _context.Publicacoes.Add(publicacao);
             await _context.SaveChangesAsync();

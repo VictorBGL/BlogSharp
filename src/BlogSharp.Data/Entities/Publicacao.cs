@@ -2,10 +2,15 @@
 {
     public class Publicacao
     {
-        public Publicacao(string titulo, string descricao, string? imagem, Guid autorId) 
+        public Publicacao()
+        {
+             
+        }
+
+        public Publicacao(string titulo, string descricao, string? imagem, Guid autorId)
         {
             Titulo = titulo;
-            Descricao = descricao; 
+            Descricao = descricao;
             Imagem = imagem;
             AutorId = autorId;
             DataPublicacao = DateTime.Now;
@@ -20,5 +25,11 @@
         public Guid AutorId { get; private set; }
         public virtual Usuario Autor { get; private set; }
         public virtual ICollection<Comentario>? Comentarios { get; private set; }
+
+        public void CriarPublicacao(Guid autorId)
+        {
+            AutorId = autorId;
+            DataPublicacao = DateTime.Now;
+        }
     }
 }

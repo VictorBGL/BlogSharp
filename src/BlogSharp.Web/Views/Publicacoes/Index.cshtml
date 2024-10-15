@@ -1,8 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model IEnumerable<PublicacaoResponseModel>
 
 <style>
     /* Reset */
@@ -18,27 +14,27 @@
         color: #333;
     }
 
-    header {
-        background-color: #1d1f21;
-        padding: 20px;
-    }
+    <!-- header {
+         background-color: #1d1f21;
+         padding: 20px;
+     }
 
-        header .menu {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-        }
+         header .menu {
+             list-style: none;
+             display: flex;
+             justify-content: center;
+         }
 
-            header .menu li {
-                margin: 0 15px;
-            }
+             header .menu li {
+                 margin: 0 15px;
+             }
 
-                header .menu li a {
-                    color: #fff;
-                    text-decoration: none;
-                    font-weight: bold;
-                }
-
+                 header .menu li a {
+                     color: #fff;
+                     text-decoration: none;
+                     font-weight: bold;
+                 }
+    -->
     .container {
         max-width: 1200px;
         margin: 40px auto;
@@ -99,7 +95,7 @@
         font-size: 0.9rem;
         color: #666;
     }
-
+    <!--
     footer {
         text-align: center;
         padding: 20px;
@@ -107,10 +103,12 @@
         color: #fff;
         margin-top: 40px;
     }
+    -->
 
 </style>
 
 <body>
+    <!--
     <header>
         <nav>
             <ul class="menu">
@@ -120,22 +118,26 @@
             </ul>
         </nav>
     </header>
-
+    -->
     <div class="container">
         <h1>Publicações</h1>
         <div class="publication-grid">
-            <!-- Publicação 1 -->
-            <div class="publication-card">
-                <img src="https://via.placeholder.com/300x200" alt="Imagem Publicação 1">
-                <div class="card-content">
-                    <span class="tag">Programação</span>
-                    <h2>Título da Publicação 1</h2>
-                    <p>Autor: João Silva</p>
-                    <p class="publication-description">Este artigo aborda técnicas avançadas de JavaScript para desenvolvedores experientes...</p>
-                </div>
-            </div>
-
-            <!-- Publicação 2 -->
+            @{
+                foreach(var item in Model)
+                {
+                    <div class="publication-card">
+                        <img src="https://via.placeholder.com/300x200" alt="Imagem Publicação 1">
+                        <div class="card-content">
+                            <!--<span class="tag">Programação</span>-->
+                            <h2>@Html.DisplayFor(moldeItem => item.Titulo)</h2>
+                            <p>Autor: @Html.DisplayFor(moldeItem => item.Autor.Email)</p>
+                            <p class="publication-description">@Html.DisplayFor(moldeItem => item.Descricao)</p>
+                        </div>
+                    </div>
+                }
+            }
+            
+            <!--
             <div class="publication-card">
                 <img src="https://via.placeholder.com/300x200" alt="Imagem Publicação 2">
                 <div class="card-content">
@@ -145,10 +147,12 @@
                     <p class="publication-description">Neste artigo, exploramos as melhores práticas de design responsivo usando CSS Grid...</p>
                 </div>
             </div>
+            -->
         </div>
     </div>
-
+    <!--
     <footer>
         <p>© 2024 Blog de Programadores</p>
     </footer>
+    -->
 </body>
