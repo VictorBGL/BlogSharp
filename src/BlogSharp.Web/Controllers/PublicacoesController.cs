@@ -24,7 +24,7 @@ namespace BlogSharp.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var publicacoes = await _context.Publicacoes.Include(p => p.Autor).OrderBy(p => p.DataPublicacao).ToListAsync();
+            var publicacoes = await _context.Publicacoes.Include(p => p.Autor).OrderByDescending(p => p.DataPublicacao).ToListAsync();
 
             var resultado = _mapper.Map<List<PublicacaoResponseModel>>(publicacoes);
 
@@ -43,12 +43,21 @@ namespace BlogSharp.Web.Controllers
         {
             var publicacao = _mapper.Map<Publicacao>(model);
 
-            publicacao.CriarPublicacao(Guid.Parse("E30048E7-B57F-428C-9251-D7FCC88B4669"));
+            publicacao.CriarPublicacao(Guid.Parse("AB2A5542-C8AF-4861-B363-4EB94C296F52"));
 
             _context.Publicacoes.Add(publicacao);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var post = await _context.Publicacoes.Include(p => p.Autor).Include(p => p.Comentarios.OrderByDescending(x => x.DataPublicacao)).FirstOrDefaultAsync(p => p.Id == id);
+
+            var resultado = _mapper.Map<PublicacaoResponseModel>(post);
+
+            return View(resultado);
         }
     }
 }

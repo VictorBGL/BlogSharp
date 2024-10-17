@@ -4,8 +4,6 @@ namespace BlogSharp.Data.Models
 {
     public class RegistroUsuarioModel
     {
-        public string? Imagem { get; set; }
-
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public string Nome { get; set; }
 

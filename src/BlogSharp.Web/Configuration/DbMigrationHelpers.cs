@@ -1,10 +1,19 @@
 ﻿using BlogSharp.Data.Data;
 using BlogSharp.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Net.NetworkInformation;
 
 namespace BlogSharp.Web.Configuration
 {
+    public static class DbMigrationHelperExtension
+    {
+        public static void UseDbMigrationHelper(this WebApplication app)
+        {
+            DbMigrationHelpers.EnsureSeedData(app).Wait();
+        }
+    }
+
     public static class DbMigrationHelpers
     {
         public static async Task EnsureSeedData(WebApplication serviceScope)
@@ -30,13 +39,35 @@ namespace BlogSharp.Web.Configuration
 
         public static async Task EnsureSeedProducts(ApiDbContext context)
         {
+            if (context.Users.Any()) 
+                return;
+
+            var userId = Guid.NewGuid();
+
+            await context.Users.AddAsync(new IdentityUser
+            {
+                Id = userId.ToString(),
+                UserName = "admin@admin.com",
+                NormalizedUserName = "ADMIN@ADMIN.COM",
+                Email = "admin@admin.com",
+                NormalizedEmail = "ADMIN@ADMIN.COM",
+                AccessFailedCount = 0,
+                LockoutEnabled = false,
+                PasswordHash = "AQAAAAIAAYagAAAAEJfnkXwMwUa7tr3NITeoGPnAjCbvkd5y2TdQ/wglcpCinkNGSF30kpgTIH3WsCTCkg==",
+                TwoFactorEnabled = false,
+                ConcurrencyStamp = Guid.NewGuid().ToString(),
+                EmailConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString(),
+            });
+
+            await context.SaveChangesAsync();
+
+
             if (context.Usuarios.Any())
                 return;
 
-            var usuario = new Usuario(Guid.NewGuid(), "Admin", "admin@admin.com", string.Empty);
+            var usuario = new Usuario(userId, "Admin", "admin@admin.com");
             usuario.SetAdmin();
-
-            var usuarioId = Guid.NewGuid();
 
             await context.Usuarios.AddAsync(usuario);
             await context.SaveChangesAsync();

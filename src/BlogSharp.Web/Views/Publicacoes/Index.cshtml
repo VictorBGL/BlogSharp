@@ -14,27 +14,6 @@
         color: #333;
     }
 
-    <!-- header {
-         background-color: #1d1f21;
-         padding: 20px;
-     }
-
-         header .menu {
-             list-style: none;
-             display: flex;
-             justify-content: center;
-         }
-
-             header .menu li {
-                 margin: 0 15px;
-             }
-
-                 header .menu li a {
-                     color: #fff;
-                     text-decoration: none;
-                     font-weight: bold;
-                 }
-    -->
     .container {
         max-width: 1200px;
         margin: 40px auto;
@@ -59,6 +38,7 @@
         border-radius: 8px;
         overflow: hidden;
         transition: transform 0.3s ease;
+        cursor: pointer;
     }
 
         .publication-card:hover {
@@ -94,65 +74,32 @@
     .publication-description {
         font-size: 0.9rem;
         color: #666;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
     }
-    <!--
-    footer {
-        text-align: center;
-        padding: 20px;
-        background-color: #1d1f21;
-        color: #fff;
-        margin-top: 40px;
-    }
-    -->
 
 </style>
 
 <body>
-    <!--
-    <header>
-        <nav>
-            <ul class="menu">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Publicações</a></li>
-                <li><a href="#">Contato</a></li>
-            </ul>
-        </nav>
-    </header>
-    -->
     <div class="container">
         <h1>Publicações</h1>
         <div class="publication-grid">
             @{
                 foreach(var item in Model)
                 {
-                    <div class="publication-card">
+                    <div class="publication-card" asp-action="Details" asp-route-id="@item.Id">
                         <img src="https://via.placeholder.com/300x200" alt="Imagem Publicação 1">
                         <div class="card-content">
-                            <!--<span class="tag">Programação</span>-->
                             <h2>@Html.DisplayFor(moldeItem => item.Titulo)</h2>
                             <p>Autor: @Html.DisplayFor(moldeItem => item.Autor.Email)</p>
                             <p class="publication-description">@Html.DisplayFor(moldeItem => item.Descricao)</p>
+                            <span>@Html.DisplayFor(moldeItem => item.DataPublicacao.Value.Date)</span>
                         </div>
                     </div>
                 }
             }
-            
-            <!--
-            <div class="publication-card">
-                <img src="https://via.placeholder.com/300x200" alt="Imagem Publicação 2">
-                <div class="card-content">
-                    <span class="tag">Front-end</span>
-                    <h2>Título da Publicação 2</h2>
-                    <p>Autor: Maria Souza</p>
-                    <p class="publication-description">Neste artigo, exploramos as melhores práticas de design responsivo usando CSS Grid...</p>
-                </div>
-            </div>
-            -->
         </div>
     </div>
-    <!--
-    <footer>
-        <p>© 2024 Blog de Programadores</p>
-    </footer>
-    -->
 </body>

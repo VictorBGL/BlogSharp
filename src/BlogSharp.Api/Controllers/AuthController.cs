@@ -51,7 +51,7 @@ namespace BlogSharp.Api.Controllers
 
             if (result.Succeeded) 
             {
-                var usuario = new Usuario(Guid.Parse(user.Id), model.Nome, model.Email.ToLower(), model.Imagem);
+                var usuario = new Usuario(Guid.Parse(user.Id), model.Nome, model.Email.ToLower());
                 _context.Usuarios.Add(usuario);
                 await _context.SaveChangesAsync();
                 await _signInManager.SignInAsync(user, false);
