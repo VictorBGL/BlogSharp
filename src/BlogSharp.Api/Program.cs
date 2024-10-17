@@ -55,10 +55,13 @@ builder.Services.AddSwaggerGen(c =>
      });
 });
 
+//builder.Services.AddDbContext<ApiDbContext>(options =>
+//{
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnetcion"));
+//});
+
 builder.Services.AddDbContext<ApiDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnetcion"));
-});
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnetcion")));
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddRoles<IdentityRole>()

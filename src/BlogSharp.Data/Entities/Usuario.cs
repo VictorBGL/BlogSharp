@@ -2,6 +2,11 @@
 {
     public class Usuario
     {
+        public Usuario()
+        {
+
+        }
+
         public Usuario(Guid id, string nome, string email, string? imagem)
         {
             Id = id;
@@ -20,5 +25,10 @@
         public DateTime DataCadastro { get; private set; }
         public virtual ICollection<Publicacao>? Publicacoes { get; private set; }
         public virtual ICollection<Comentario>? Comentarios { get; private set; }
+
+        public void SetAdmin()
+        {
+            Administrador = true;
+        }
     }
 }
