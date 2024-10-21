@@ -1,4 +1,4 @@
-﻿using BlogSharp.Data.Entities;
+﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace BlogSharp.Data.Models
@@ -12,5 +12,6 @@ namespace BlogSharp.Data.Models
         public required string Descricao { get; set; }
 
         public string? Imagem { get; set; }
+        public IFormFile? ImagemFile { get; set; }
     }
 }

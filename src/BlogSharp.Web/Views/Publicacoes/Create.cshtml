@@ -1,19 +1,111 @@
 ﻿@model PublicacaoModel
 
-<h4>Preencha os dados</h4>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+    textarea {
+        resize: vertical;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .btn-cancelar {
+        background-color: #ccc;
+        color: #333;
+    }
+
+        .btn-cancelar:hover {
+            background-color: #b3b3b3;
+        }
+
+    .btn-salvar {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+        .btn-salvar:hover {
+            background-color: #45a049;
+        }
+</style>
+
+<body>
+    <div class="container">
+        <h4>Preencha os dados</h4>
+
+        <form asp-action="Create" method="post" enctype="multipart/form-data" class="form-publicacao">
             <div class="form-group">
-                <input asp-for="Titulo" class="form-control"/>
+                <label for="titulo">Título</label>
+                <input asp-for="Titulo" type="text" id="titulo" name="titulo" placeholder="Digite o título da publicação">
             </div>
 
             <div class="form-group">
-                <input asp-for="Descricao" class="form-control" />
+                <label for="descricao">Descrição</label>
+                <textarea asp-for="Descricao" id="descricao" name="descricao" rows="4" placeholder="Digite a descrição da publicação"></textarea>
             </div>
 
-            <input type="submit" value="Enviar" class="btn btn-info" />
+            <div class="form-group">
+                <label for="imagem">Imagem</label>
+                <input asp-for="ImagemFile" type="file" id="imagemFile" name="imagemFile">
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn-salvar">Salvar</button>
+            </div>
         </form>
     </div>
-</div>
+</body>

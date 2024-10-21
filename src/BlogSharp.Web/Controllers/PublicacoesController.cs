@@ -13,13 +13,15 @@ namespace BlogSharp.Web.Controllers
         private readonly ApiDbContext _context;
         private readonly IHttpContextAccessor _accessor;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public PublicacoesController(
-            ApiDbContext context, IHttpContextAccessor accessor, IMapper mapper)
+            ApiDbContext context, IHttpContextAccessor accessor, IMapper mapper, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _accessor = accessor;
             _mapper = mapper;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index()
@@ -31,6 +33,7 @@ namespace BlogSharp.Web.Controllers
             return View(resultado);
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -41,9 +44,26 @@ namespace BlogSharp.Web.Controllers
         [Authorize]
         public async Task<IActionResult> Create(PublicacaoModel model)
         {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            if (model.ImagemFile != null)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "imagens");
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImagemFile.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.ImagemFile.CopyToAsync(fileStream);
+                }
+
+                model.Imagem = uniqueFileName;
+            }
+
             var publicacao = _mapper.Map<Publicacao>(model);
 
-            publicacao.CriarPublicacao(Guid.Parse("AB2A5542-C8AF-4861-B363-4EB94C296F52"));
+            publicacao.CriarPublicacao(Guid.Parse("A55377FC-5E18-40DD-A75A-0448ACF1A759"));
 
             _context.Publicacoes.Add(publicacao);
             await _context.SaveChangesAsync();

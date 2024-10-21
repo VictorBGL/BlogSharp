@@ -90,7 +90,14 @@
                 foreach(var item in Model)
                 {
                     <div class="publication-card" asp-action="Details" asp-route-id="@item.Id">
-                        <img src="https://via.placeholder.com/300x200" alt="Imagem Publicação 1">
+                        @if (!string.IsNullOrEmpty(item.Imagem))
+                        {
+                            <img src="~/imagens/@item.Imagem" alt="Imagem Publicação">
+                        }
+                        else
+                        {
+                            <img src="https://via.placeholder.com/300x200" alt="Imagem Publicação">
+                        }
                         <div class="card-content">
                             <h2>@Html.DisplayFor(moldeItem => item.Titulo)</h2>
                             <p>Autor: @Html.DisplayFor(moldeItem => item.Autor.Email)</p>

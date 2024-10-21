@@ -20,4 +20,8 @@
     <ProjectReference Include="..\BlogSharp.Data\BlogSharp.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\imagens\" />
+  </ItemGroup>
+
 </Project>
