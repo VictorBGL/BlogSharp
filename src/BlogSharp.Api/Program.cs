@@ -1,6 +1,7 @@
 using BlogSharp.Api.Configuration;
 using BlogSharp.Data.Data;
 using BlogSharp.Data.Extensions;
+using BlogSharp.Data.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -54,6 +55,8 @@ builder.Services.AddSwaggerGen(c =>
         }
      });
 });
+
+builder.Services.AddScoped<IAspnetUser, AspnetUser>();
 
 //builder.Services.AddDbContext<ApiDbContext>(options =>
 //{

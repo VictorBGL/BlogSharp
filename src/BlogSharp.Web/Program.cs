@@ -1,4 +1,6 @@
 using BlogSharp.Data.Data;
+using BlogSharp.Data.Extensions;
+using BlogSharp.Data.Interfaces;
 using BlogSharp.Web.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +24,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddScoped<IAspnetUser, AspnetUser>();
 
 var app = builder.Build();
 

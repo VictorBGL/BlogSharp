@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BlogSharp.Data.Data;
 using BlogSharp.Data.Entities;
+using BlogSharp.Data.Interfaces;
 using BlogSharp.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,13 +16,15 @@ namespace BlogSharp.Api.Controllers
         private readonly ApiDbContext _context;
         private readonly IHttpContextAccessor _accessor;
         private readonly IMapper _mapper;
+        private readonly IAspnetUser _aspnetUser;
 
         public PublicacaoController(
-            ApiDbContext context, IHttpContextAccessor accessor, IMapper mapper)
+            ApiDbContext context, IHttpContextAccessor accessor, IMapper mapper, IAspnetUser aspnetUser)
         {
             _context = context;
             _accessor = accessor;
             _mapper = mapper;
+            _aspnetUser = aspnetUser;
         }
 
         [HttpGet]
@@ -50,7 +53,9 @@ namespace BlogSharp.Api.Controllers
         {
             var publicacao = _mapper.Map<Publicacao>(model);
 
-            publicacao.CriarPublicacao(new Guid());
+            var userId = _aspnetUser.GetUserId();
+
+            publicacao.CriarPublicacao(Guid.Parse(userId));
 
             _context.Publicacoes.Add(publicacao);
             await _context.SaveChangesAsync();

@@ -13,6 +13,8 @@ namespace BlogSharp.Web.Configuration
             CreateMap<Publicacao, PublicacaoResponseModel>();
 
             CreateMap<Usuario, UsuarioResponseModel>();
+
+            CreateMap<Comentario, ComentarioResponseModel>();
         }
     }
 }

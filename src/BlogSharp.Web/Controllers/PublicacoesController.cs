@@ -3,6 +3,7 @@ using BlogSharp.Data.Data;
 using BlogSharp.Data.Entities;
 using BlogSharp.Data.Interfaces;
 using BlogSharp.Data.Models;
+using BlogSharp.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -78,9 +79,31 @@ namespace BlogSharp.Web.Controllers
         {
             var post = await _context.Publicacoes.Include(p => p.Autor).Include(p => p.Comentarios.OrderByDescending(x => x.DataPublicacao)).FirstOrDefaultAsync(p => p.Id == id);
 
-            var resultado = _mapper.Map<PublicacaoResponseModel>(post);
+            var publicacao = _mapper.Map<PublicacaoResponseModel>(post);
 
-            return View(resultado);
+            var viewModel = new PublicacaoComentarioViewModel()
+            {
+                Publicacao = publicacao,
+                Comentario = new ComentarioModel(),
+                PublicacaoId = id
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> AdicionarComentario(PublicacaoComentarioViewModel model)
+        {
+            var userId = _aspnetUser.GetUserId();
+
+            var comentario = new Comentario(model.Comentario.Descricao, Guid.Parse(userId), model.PublicacaoId);
+
+            _context.Comentarios.Add(comentario);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = model.PublicacaoId });
         }
     }
 }

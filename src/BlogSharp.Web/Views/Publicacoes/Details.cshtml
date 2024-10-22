@@ -1,1 +1,205 @@
-﻿@model PublicacaoResponseModel
+﻿@model PublicacaoComentarioViewModel
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        background-color: #f5f5f5;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Estilo para o botão de voltar */
+    .back-button {
+        margin-bottom: 20px;
+    }
+
+    .btn-back {
+        text-decoration: none;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+        .btn-back:hover {
+            background-color: #0056b3;
+        }
+
+    .publication-details {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .publication-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .publication-title {
+        font-size: 28px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .publication-description {
+        font-size: 18px;
+        color: #666;
+    }
+
+    .comments-section {
+        margin-top: 30px;
+    }
+
+        .comments-section h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+    .comment {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .comment-author {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .comment-description {
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: #555;
+    }
+
+    .comment-date {
+        font-size: 14px;
+        color: #999;
+        text-align: right;
+    }
+
+    /* Estilo do formulário para adicionar comentário */
+    .add-comment {
+        margin-bottom: 30px;
+        padding: 20px;
+        background-color: #f1f1f1;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+        .add-comment h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .add-comment label {
+            font-size: 16px;
+            color: #333;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .add-comment input[type="text"],
+        .add-comment textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .add-comment textarea {
+            resize: vertical;
+        }
+
+    .btn-submit {
+        background-color: #28a745;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .btn-submit:hover {
+            background-color: #218838;
+        }
+</style>
+
+<body>
+    <div class="container">
+        <!--
+        <div class="back-button">
+            <a asp-page="../../" class="btn-back">← Voltar</a>
+        </div>
+        -->
+        <div class="publication-details">
+            @if (!string.IsNullOrEmpty(Model.Publicacao.Imagem))
+            {
+                <img src="~/imagens/@Model.Publicacao.Imagem" alt="Imagem Publicação" class="publication-image">
+            }
+            else
+            {
+                <img src="https://via.placeholder.com/300x200" alt="Imagem Publicação" class="publication-image">
+            }
+            <h1 class="publication-title">@Model.Publicacao.Titulo</h1>
+            <p class="publication-description">@Model.Publicacao.Descricao</p>
+        </div>
+
+        <div class="comments-section">
+            <div class="add-comment">
+                <h3>Adicionar novo comentário</h3>
+                @using (Html.BeginForm("AdicionarComentario", "Publicacoes", FormMethod.Post))
+                {
+                    @Html.HiddenFor(model => model.PublicacaoId)
+
+                    <div>
+                        @Html.TextAreaFor(model => model.Comentario.Descricao, new { @class = "form-control", rows = "4", placeholder = "Escreva seu comentário" })
+                    </div>
+                    <button type="submit" class="btn-submit">Enviar Comentário</button>
+                }
+                <!--
+                <form asp-action="AdicionarComentario" method="post">
+                    <textarea id="comment" name="comment" rows="4" required placeholder="Escreva seu comentário"></textarea>
+
+                    <button type="submit" class="btn-submit">Enviar Comentário</button>
+                </form>
+                -->
+            </div>
+
+            <h2>Comentários</h2>
+            @foreach (var comentario in Model.Publicacao.Comentarios)
+            {
+                <div class="comment">
+                    <p class="comment-author">@comentario.Autor.Email</p>
+                    <p class="comment-description">@comentario.Descricao</p>
+                    <p class="comment-date">@comentario.DataPublicacao.ToString("dd/MM/yyyy HH:mm")</p>
+                </div>
+            }
+        </div>
+    </div>
+</body>

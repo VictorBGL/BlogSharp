@@ -2,6 +2,19 @@
 {
     public class Comentario
     {
+        public Comentario()
+        {
+
+        }
+
+        public Comentario(string descricao, Guid autorId, Guid publicacaoId)
+        {
+            Descricao = descricao;
+            AutorId = autorId;
+            PublicacaoId = publicacaoId;
+            DataPublicacao = DateTime.Now;
+        }
+
         public Guid Id { get; private set; }
         public string Descricao { get; private set; }
         public DateTime DataPublicacao { get; private set; }
