@@ -50,7 +50,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Publicacoes}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.UseDbMigrationHelper();

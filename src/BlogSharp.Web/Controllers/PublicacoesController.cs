@@ -26,9 +26,10 @@ namespace BlogSharp.Web.Controllers
             _aspnetUser = aspnetUser;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(bool filtroPorUsuario = false)
         {
-            var publicacoes = await _context.Publicacoes.Include(p => p.Autor).OrderByDescending(p => p.DataPublicacao).ToListAsync();
+            var userId = _aspnetUser.GetUserId();
+            var publicacoes = await _context.Publicacoes.Include(p => p.Autor).OrderByDescending(p => p.DataPublicacao).Where(p => !filtroPorUsuario || p.AutorId == Guid.Parse(userId)).ToListAsync();
 
             var resultado = _mapper.Map<List<PublicacaoResponseModel>>(publicacoes);
 
@@ -104,6 +105,65 @@ namespace BlogSharp.Web.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = model.PublicacaoId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> EditarComentario(Guid comentarioId, Guid publicacaoId, string descricao)
+        {
+            var userId = _aspnetUser.GetUserId();
+
+            var comentario = await _context.Comentarios.FirstOrDefaultAsync(p => p.Id == comentarioId);
+
+            if (comentario == null)
+            {
+                return NotFound();
+            }
+
+            if (!userId.Equals(comentario.AutorId.ToString()))
+            {
+                TempData["ErrorMessage"] = "Você não pode editar um comentário de outro usuário!";
+                return RedirectToAction("Details", new { id = publicacaoId });
+            }
+
+            comentario.Atualizar(descricao);
+
+            _context.Comentarios.Update(comentario);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = publicacaoId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> ExcluirComentario(Guid comentarioId, Guid publicacaoId)
+        {
+            var userId = _aspnetUser.GetUserId();
+
+            if (comentarioId == null)
+            {
+                ModelState.AddModelError("", "ID do comentário inválido.");
+                return RedirectToAction("Details", new { id = publicacaoId });
+            }
+
+            var comentario = await _context.Comentarios.FirstOrDefaultAsync(p => p.Id == comentarioId);
+            if (comentario == null)
+            {
+                return NotFound();
+            }
+
+            if (!userId.Equals(comentario.AutorId.ToString()))
+            {
+                TempData["ErrorMessage"] = "Você não pode excluir um comentário de outro usuário!";
+                return RedirectToAction("Details", new { id = publicacaoId });
+            }
+
+            _context.Comentarios.Remove(comentario);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = publicacaoId });
         }
     }
 }

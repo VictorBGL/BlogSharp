@@ -66,7 +66,7 @@ namespace BlogSharp.Web.Configuration
             if (context.Usuarios.Any())
                 return;
 
-            var usuario = new Usuario(userId, "Admin", "admin@admin.com");
+            var usuario = new Usuario(userId, "admin@admin.com");
             usuario.SetAdmin();
 
             await context.Usuarios.AddAsync(usuario);

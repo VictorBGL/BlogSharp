@@ -23,5 +23,12 @@
         public Guid PublicacaoId { get; private set; }
         public virtual Publicacao Publicacao { get; private set; }
         public virtual Usuario? Autor { get; private set; }
+
+
+        public void Atualizar(string descricao)
+        {
+            Descricao = descricao;
+            DataUltimaAtualizacao = DateTime.Now;
+        }
     }
 }

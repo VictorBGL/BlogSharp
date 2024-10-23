@@ -20,7 +20,6 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    /* Estilo para o botão de voltar */
     .back-button {
         margin-bottom: 20px;
     }
@@ -98,7 +97,6 @@
         text-align: right;
     }
 
-    /* Estilo do formulário para adicionar comentário */
     .add-comment {
         margin-bottom: 30px;
         padding: 20px;
@@ -148,15 +146,77 @@
         .btn-submit:hover {
             background-color: #218838;
         }
+
+    .button-group {
+        display: flex;
+        justify-content: end;
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .btn-voltar {
+        background-color: #ccc;
+        color: #333;
+    }
+
+        .btn-voltar:hover {
+            background-color: #b3b3b3;
+        }
+
+    .hidden {
+        display: none;
+    }
+
+    .icon-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+        .icon-button i {
+            font-size: 20px;
+        }
+
+    .edit-buttons {
+        margin-top: 10px;
+    }
+
+    .btn-cancel {
+        background-color: #dc3545;
+        color: white;
+    }
+
+        .btn-cancel:hover {
+            background-color: #c82333;
+        }
+
+
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+
+    .alert-danger {
+        background-color: #f2dede;
+        color: #a94442;
+    }
+
+    .alert-success {
+        background-color: #dff0d8;
+        color: #3c763d;
+    }
 </style>
 
 <body>
     <div class="container">
-        <!--
-        <div class="back-button">
-            <a asp-page="../../" class="btn-back">← Voltar</a>
-        </div>
-        -->
         <div class="publication-details">
             @if (!string.IsNullOrEmpty(Model.Publicacao.Imagem))
             {
@@ -182,24 +242,125 @@
                     </div>
                     <button type="submit" class="btn-submit">Enviar Comentário</button>
                 }
-                <!--
-                <form asp-action="AdicionarComentario" method="post">
-                    <textarea id="comment" name="comment" rows="4" required placeholder="Escreva seu comentário"></textarea>
-
-                    <button type="submit" class="btn-submit">Enviar Comentário</button>
-                </form>
-                -->
             </div>
 
-            <h2>Comentários</h2>
+            @if (Model.Publicacao.Comentarios.Count() > 0)
+            {
+                <h2>Comentários</h2>
+            }
+
             @foreach (var comentario in Model.Publicacao.Comentarios)
             {
-                <div class="comment">
-                    <p class="comment-author">@comentario.Autor.Email</p>
-                    <p class="comment-description">@comentario.Descricao</p>
-                    <p class="comment-date">@comentario.DataPublicacao.ToString("dd/MM/yyyy HH:mm")</p>
+                <div class="comment" id="comment-@comentario.Id">
+                    <div class="comment-content">
+                        <div>
+                            <p class="comment-author">@comentario.Autor.Email</p>
+                            <p class="comment-description" id="comment-description-@comentario.Id">@comentario.Descricao</p>
+                            <p class="comment-date">@comentario.DataPublicacao.ToString("dd/MM/yyyy HH:mm")</p>
+                        </div>
+                        <div class="comment-icons-right">
+                            <button class="icon-button btn-edit" id="edit-icon-@comentario.Id" onclick="enableEditComment('@comentario.Id')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="icon-button btn-delete" id="delete-icon-@comentario.Id"
+                                    onclick="confirmDelete('@comentario.Id', '@Model.PublicacaoId')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="edit-comment-@comentario.Id" class="hidden">
+                        @using (Html.BeginForm("EditarComentario", "Publicacoes", FormMethod.Post))
+                        {
+                            @Html.Hidden("comentarioId", comentario.Id)
+                            @Html.Hidden("publicacaoId", Model.PublicacaoId)
+                            <textarea name="descricao" class="form-control">@comentario.Descricao</textarea>
+                            <div class="edit-buttons">
+                                <button type="submit" class="btn-submit">Salvar</button>
+                                <button type="button" class="btn-cancel" onclick="cancelEdit('@comentario.Id')">Cancelar</button>
+                            </div>
+                        }
+                    </div>
                 </div>
             }
         </div>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <div class="button-group">
+            <button type="button" class="btn-voltar">Voltar</button>
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            window.enableEditComment = function (comentarioId) {
+                console.log('Função enableEditComment chamada para:', comentarioId);
+                var commentDisplay = document.getElementById('comment-description-' + comentarioId);
+                var editIcon = document.getElementById('edit-icon-' + comentarioId);
+                var deleteIcon = document.getElementById('delete-icon-' + comentarioId);
+                var editForm = document.getElementById('edit-comment-' + comentarioId);
+
+                commentDisplay.classList.add('hidden');
+                editIcon.classList.add('hidden');
+                deleteIcon.classList.add('hidden');
+                editForm.classList.remove('hidden');
+            };
+
+            window.cancelEdit = function (comentarioId) {
+                var commentDisplay = document.getElementById('comment-description-' + comentarioId);
+                var editIcon = document.getElementById('edit-icon-' + comentarioId);
+                var deleteIcon = document.getElementById('delete-icon-' + comentarioId);
+                var editForm = document.getElementById('edit-comment-' + comentarioId);
+
+                commentDisplay.classList.remove('hidden');
+                editIcon.classList.remove('hidden');
+                deleteIcon.classList.remove('hidden');
+                editForm.classList.add('hidden');
+            };
+        });
+
+        function confirmDelete(comentarioId, publicacaoId) {
+            if (confirm("Tem certeza que deseja excluir este comentário?")) {
+                var form = document.createElement("form");
+                form.method = "post";
+                form.action = "/Publicacoes/ExcluirComentario";
+
+                var antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                var inputToken = document.createElement("input");
+                inputToken.type = "hidden";
+                inputToken.name = "__RequestVerificationToken";
+                inputToken.value = antiForgeryToken;
+
+                var inputComentario = document.createElement("input");
+                inputComentario.type = "hidden";
+                inputComentario.name = "comentarioId";
+                inputComentario.value = comentarioId;
+
+                var inputPublicacao = document.createElement("input");
+                inputPublicacao.type = "hidden";
+                inputPublicacao.name = "publicacaoId";
+                inputPublicacao.value = publicacaoId;
+
+                form.appendChild(inputToken);
+                form.appendChild(inputComentario);
+                form.appendChild(inputPublicacao);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+
+    </script>
+ 
 </body>
+
+<script>
+    document.querySelector('.btn-voltar').addEventListener('click', function () {
+        window.location.href = '/Publicacoes/Index';
+    });
+</script>

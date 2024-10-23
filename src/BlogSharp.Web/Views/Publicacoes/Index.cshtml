@@ -84,12 +84,12 @@
 
 <body>
     <div class="container">
-        <h1>Publicações</h1>
+        <h1>BlogSharp</h1>
         <div class="publication-grid">
             @{
                 foreach(var item in Model)
                 {
-                    <div class="publication-card" asp-action="Details" asp-route-id="@item.Id">
+                    <div class="publication-card" data-id="@item.Id">
                         @if (!string.IsNullOrEmpty(item.Imagem))
                         {
                             <img src="~/imagens/@item.Imagem" alt="Imagem Publicação">
@@ -110,3 +110,14 @@
         </div>
     </div>
 </body>
+
+<script>
+    document.querySelectorAll('.publication-card').forEach(card => {
+        card.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            if (id) {
+                window.location.href = `/Publicacoes/Details/${id}`;
+            }
+        });
+    });
+</script>
