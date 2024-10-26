@@ -33,6 +33,8 @@ namespace BlogSharp.Web.Controllers
 
             var resultado = _mapper.Map<List<PublicacaoResponseModel>>(publicacoes);
 
+            ViewBag.FiltroPorUsuario = filtroPorUsuario;
+
             return View(resultado);
         }
 
@@ -78,7 +80,11 @@ namespace BlogSharp.Web.Controllers
 
         public async Task<IActionResult> Details(Guid id)
         {
-            var post = await _context.Publicacoes.Include(p => p.Autor).Include(p => p.Comentarios.OrderByDescending(x => x.DataPublicacao)).FirstOrDefaultAsync(p => p.Id == id);
+            var post = await _context.Publicacoes
+                                            .Include(p => p.Autor)
+                                            .Include(p => p.Comentarios.OrderByDescending(x => x.DataPublicacao))
+                                                .ThenInclude(p => p.Autor)
+                                            .FirstOrDefaultAsync(p => p.Id == id);
 
             var publicacao = _mapper.Map<PublicacaoResponseModel>(post);
 
@@ -88,6 +94,22 @@ namespace BlogSharp.Web.Controllers
                 Comentario = new ComentarioModel(),
                 PublicacaoId = id
             };
+
+            var usuarioLogado = false;
+            var usuarioAdmin = false;
+
+            var userId = _aspnetUser.GetUserId();
+
+            if (string.IsNullOrEmpty(userId))
+                return View(viewModel);
+
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(p => p.Id == Guid.Parse(userId));
+
+            if (usuario != null && usuario.Administrador)
+                usuarioAdmin = true;
+
+            ViewBag.UsuarioId = Guid.Parse(userId);
+            ViewBag.UsuarioAdmin = usuarioAdmin;
 
             return View(viewModel);
         }
@@ -119,12 +141,6 @@ namespace BlogSharp.Web.Controllers
             if (comentario == null)
             {
                 return NotFound();
-            }
-
-            if (!userId.Equals(comentario.AutorId.ToString()))
-            {
-                TempData["ErrorMessage"] = "Você não pode editar um comentário de outro usuário!";
-                return RedirectToAction("Details", new { id = publicacaoId });
             }
 
             comentario.Atualizar(descricao);

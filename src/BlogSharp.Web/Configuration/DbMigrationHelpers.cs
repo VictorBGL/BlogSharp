@@ -62,6 +62,29 @@ namespace BlogSharp.Web.Configuration
 
             await context.SaveChangesAsync();
 
+            if (context.Roles.Any())
+                return;
+
+            var roleId = Guid.NewGuid().ToString();
+
+            context.Roles.AddAsync(new IdentityRole
+            {
+                Id = roleId,
+                Name = "Admin"
+            });
+
+            await context.SaveChangesAsync();
+
+            if (context.UserRoles.Any())
+                return;
+
+            context.UserRoles.AddAsync(new IdentityUserRole<string>
+            {
+                RoleId = roleId,
+                UserId = userId.ToString()
+            });
+
+            await context.SaveChangesAsync();
 
             if (context.Usuarios.Any())
                 return;

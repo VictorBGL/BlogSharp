@@ -258,15 +258,18 @@
                             <p class="comment-description" id="comment-description-@comentario.Id">@comentario.Descricao</p>
                             <p class="comment-date">@comentario.DataPublicacao.ToString("dd/MM/yyyy HH:mm")</p>
                         </div>
-                        <div class="comment-icons-right">
-                            <button class="icon-button btn-edit" id="edit-icon-@comentario.Id" onclick="enableEditComment('@comentario.Id')">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="icon-button btn-delete" id="delete-icon-@comentario.Id"
-                                    onclick="confirmDelete('@comentario.Id', '@Model.PublicacaoId')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
+                        @if(ViewBag.UsuarioId != null && (ViewBag.UsuarioAdmin || ViewBag.UsuarioId == comentario.Autor.Id))
+                        {
+                            <div class="comment-icons-right">
+                                <button class="icon-button btn-edit" id="edit-icon-@comentario.Id" onclick="enableEditComment('@comentario.Id')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="icon-button btn-delete" id="delete-icon-@comentario.Id"
+                                        onclick="confirmDelete('@comentario.Id', '@Model.PublicacaoId')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        }
                     </div>
 
                     <div id="edit-comment-@comentario.Id" class="hidden">

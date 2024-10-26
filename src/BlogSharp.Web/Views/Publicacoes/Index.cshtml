@@ -84,7 +84,14 @@
 
 <body>
     <div class="container">
-        <h1>BlogSharp</h1>
+        @if (ViewBag.FiltroPorUsuario)
+        {
+            <h1>Minhas Publicações</h1>
+        }
+        else
+        {
+            <h1>BlogSharp</h1>
+        }
         <div class="publication-grid">
             @{
                 foreach(var item in Model)
