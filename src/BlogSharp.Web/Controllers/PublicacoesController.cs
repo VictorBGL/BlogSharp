@@ -78,6 +78,15 @@ namespace BlogSharp.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var post = await _context.Publicacoes.FirstOrDefaultAsync(p => p.Id == id);
+            var resultado = _mapper.Map<PublicacaoResponseModel>(post);
+
+            return View(resultado);
+        }
+
         public async Task<IActionResult> Details(Guid id)
         {
             var post = await _context.Publicacoes

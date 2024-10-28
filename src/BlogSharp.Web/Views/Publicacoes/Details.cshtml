@@ -147,6 +147,22 @@
             background-color: #218838;
         }
 
+    .btn-edit-post {
+        background-color: #28a745;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-left: 10px;
+    }
+
+        .btn-edit-post:hover {
+            background-color: #218838;
+        }
+
     .button-group {
         display: flex;
         justify-content: end;
@@ -230,6 +246,11 @@
             <p class="publication-description">@Model.Publicacao.Descricao</p>
         </div>
 
+        <div class="button-group">
+            <button type="button" class="btn-voltar">Voltar</button>
+            <button type="button" class="btn-edit-post" data-publicacao-id="@Model.PublicacaoId">Editar</button>
+        </div>
+
         <div class="comments-section">
             <div class="add-comment">
                 <h3>Adicionar novo comentário</h3>
@@ -294,10 +315,6 @@
                 @TempData["ErrorMessage"]
             </div>
         }
-
-        <div class="button-group">
-            <button type="button" class="btn-voltar">Voltar</button>
-        </div>
     </div>
 
     <script>
@@ -357,13 +374,17 @@
                 form.submit();
             }
         }
-
+        
     </script>
- 
-</body>
+</body> 
 
 <script>
     document.querySelector('.btn-voltar').addEventListener('click', function () {
         window.location.href = '/Publicacoes/Index';
+    });
+
+    document.querySelector('.btn-edit-post').addEventListener('click', function () {
+        var publicacaoId = this.getAttribute('data-publicacao-id');
+        window.location.href = '/Publicacoes/Edit/' + publicacaoId;
     });
 </script>
