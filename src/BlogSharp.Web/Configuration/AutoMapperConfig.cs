@@ -9,7 +9,7 @@ namespace BlogSharp.Web.Configuration
     {
         public AutoMapperConfig()
         {
-            CreateMap<PublicacaoModel, Publicacao>();
+            CreateMap<PublicacaoModel, Publicacao>().ReverseMap();
             CreateMap<Publicacao, PublicacaoResponseModel>();
 
             CreateMap<Usuario, UsuarioResponseModel>();

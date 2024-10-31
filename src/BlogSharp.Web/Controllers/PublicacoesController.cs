@@ -82,9 +82,65 @@ namespace BlogSharp.Web.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             var post = await _context.Publicacoes.FirstOrDefaultAsync(p => p.Id == id);
-            var resultado = _mapper.Map<PublicacaoResponseModel>(post);
+            var resultado = _mapper.Map<PublicacaoModel>(post);
 
             return View(resultado);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Edit(PublicacaoModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            if (model.ImagemFile != null)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "imagens");
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImagemFile.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.ImagemFile.CopyToAsync(fileStream);
+                }
+
+                model.Imagem = uniqueFileName;
+            }
+
+            var publicacao = _mapper.Map<Publicacao>(model);
+
+            var publicacaoDb = await _context.Publicacoes.FirstOrDefaultAsync(p => p.Id == model.Id);
+            publicacaoDb.Atualizar(publicacao);
+
+            _context.Publicacoes.Update(publicacaoDb);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Excluir(Guid publicacaoId)
+        {
+            if (publicacaoId == null)
+            {
+                ModelState.AddModelError("", "ID da publicação inválido.");
+                return RedirectToAction(nameof(Index));
+            }
+
+            var publicacao = await _context.Publicacoes.FirstOrDefaultAsync(p => p.Id == publicacaoId);
+            if (publicacao == null)
+            {
+                return NotFound();
+            }
+
+            _context.Publicacoes.Remove(publicacao);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Details(Guid id)
@@ -165,8 +221,6 @@ namespace BlogSharp.Web.Controllers
         [Authorize]
         public async Task<IActionResult> ExcluirComentario(Guid comentarioId, Guid publicacaoId)
         {
-            var userId = _aspnetUser.GetUserId();
-
             if (comentarioId == null)
             {
                 ModelState.AddModelError("", "ID do comentário inválido.");
@@ -177,12 +231,6 @@ namespace BlogSharp.Web.Controllers
             if (comentario == null)
             {
                 return NotFound();
-            }
-
-            if (!userId.Equals(comentario.AutorId.ToString()))
-            {
-                TempData["ErrorMessage"] = "Você não pode excluir um comentário de outro usuário!";
-                return RedirectToAction("Details", new { id = publicacaoId });
             }
 
             _context.Comentarios.Remove(comentario);

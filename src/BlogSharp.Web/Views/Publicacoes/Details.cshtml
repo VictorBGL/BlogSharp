@@ -163,6 +163,23 @@
             background-color: #218838;
         }
 
+    .btn-delete-post {
+        background-color: #dc3545;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+        margin-left: 10px;
+    }
+
+        .btn-delete-post:hover {
+            background-color: #c82333; 
+            transform: scale(1.05); 
+        }
+
     .button-group {
         display: flex;
         justify-content: end;
@@ -248,6 +265,7 @@
 
         <div class="button-group">
             <button type="button" class="btn-voltar">Voltar</button>
+            <button type="button" class="btn-delete-post" onclick="confirmDeletePublicacao('@Model.PublicacaoId')">Excluir</button>
             <button type="button" class="btn-edit-post" data-publicacao-id="@Model.PublicacaoId">Editar</button>
         </div>
 
@@ -286,7 +304,7 @@
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 <button class="icon-button btn-delete" id="delete-icon-@comentario.Id"
-                                        onclick="confirmDelete('@comentario.Id', '@Model.PublicacaoId')">
+                                        onclick="confirmDeleteComentario('@comentario.Id', '@Model.PublicacaoId')">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -345,7 +363,7 @@
             };
         });
 
-        function confirmDelete(comentarioId, publicacaoId) {
+        function confirmDeleteComentario(comentarioId, publicacaoId) {
             if (confirm("Tem certeza que deseja excluir este comentário?")) {
                 var form = document.createElement("form");
                 form.method = "post";
@@ -369,6 +387,30 @@
 
                 form.appendChild(inputToken);
                 form.appendChild(inputComentario);
+                form.appendChild(inputPublicacao);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+
+        function confirmDeletePublicacao(publicacaoId) {
+            if (confirm("Tem certeza que deseja excluir essa publicação?")) {
+                var form = document.createElement("form");
+                form.method = "post";
+                form.action = "/Publicacoes/Excluir";
+
+                var antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                var inputToken = document.createElement("input");
+                inputToken.type = "hidden";
+                inputToken.name = "__RequestVerificationToken";
+                inputToken.value = antiForgeryToken;
+
+                var inputPublicacao = document.createElement("input");
+                inputPublicacao.type = "hidden";
+                inputPublicacao.name = "publicacaoId";
+                inputPublicacao.value = publicacaoId;
+
+                form.appendChild(inputToken);
                 form.appendChild(inputPublicacao);
                 document.body.appendChild(form);
                 form.submit();

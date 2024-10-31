@@ -7,7 +7,7 @@ namespace BlogSharp.Data.Models
         public Guid Id { get; set; }
         public string Descricao { get; set; }
         public DateTime DataPublicacao { get; set; }
-        public DateTime DataUltimaAtualizacao { get; set; }
+        public DateTime? DataUltimaAtualizacao { get; set; }
         public virtual UsuarioResponseModel? Autor { get; set; }
     }
 }

@@ -5,6 +5,8 @@ namespace BlogSharp.Data.Models
 {
     public class PublicacaoModel
     {
+        public Guid? Id { get; set; }
+
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public required string Titulo { get; set; }
 

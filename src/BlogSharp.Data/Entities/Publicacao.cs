@@ -31,5 +31,13 @@
             AutorId = autorId;
             DataPublicacao = DateTime.Now;
         }
+
+        public void Atualizar(Publicacao publicacao)
+        {
+            Titulo = publicacao.Titulo;
+            Descricao = publicacao.Descricao;
+            Imagem = publicacao.Imagem;
+            DataUltimaAtualizacao = DateTime.Now;
+        }
     }
 }
