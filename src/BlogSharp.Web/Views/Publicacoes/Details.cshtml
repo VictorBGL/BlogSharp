@@ -265,8 +265,11 @@
 
         <div class="button-group">
             <button type="button" class="btn-voltar">Voltar</button>
-            <button type="button" class="btn-delete-post" onclick="confirmDeletePublicacao('@Model.PublicacaoId')">Excluir</button>
-            <button type="button" class="btn-edit-post" data-publicacao-id="@Model.PublicacaoId">Editar</button>
+            @if(ViewBag.UsuarioId != null && (ViewBag.UsuarioAdmin || ViewBag.UsuarioId == Model.Publicacao.Autor.Id))
+            {
+                <button type="button" class="btn-delete-post" onclick="confirmDeletePublicacao('@Model.PublicacaoId')">Excluir</button>
+                <button type="button" class="btn-edit-post" data-publicacao-id="@Model.PublicacaoId">Editar</button>
+            }
         </div>
 
         <div class="comments-section">

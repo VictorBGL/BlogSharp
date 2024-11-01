@@ -199,8 +199,6 @@ namespace BlogSharp.Web.Controllers
         [Authorize]
         public async Task<IActionResult> EditarComentario(Guid comentarioId, Guid publicacaoId, string descricao)
         {
-            var userId = _aspnetUser.GetUserId();
-
             var comentario = await _context.Comentarios.FirstOrDefaultAsync(p => p.Id == comentarioId);
 
             if (comentario == null)

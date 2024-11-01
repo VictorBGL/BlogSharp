@@ -1,4 +1,6 @@
-﻿namespace BlogSharp.Data.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BlogSharp.Data.Models
 {
     public class ComentarioModel
     {

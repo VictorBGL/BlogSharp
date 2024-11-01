@@ -78,7 +78,7 @@ namespace BlogSharp.Api.Controllers
             return Problem("Email ou senha incorretos!");
         }
 
-        private async Task<string> GerarJwt(string email)
+        private async Task<UsuarioLoginResponseModel> GerarJwt(string email)
         {
             var user = await _userManager.FindByNameAsync(email);
             var roles = await _userManager.GetRolesAsync(user);
@@ -92,6 +92,8 @@ namespace BlogSharp.Api.Controllers
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
+
+            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
 
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -108,7 +110,22 @@ namespace BlogSharp.Api.Controllers
 
             var encodedToken = tokenHandler.WriteToken(token);
 
-            return encodedToken;
+            return ObterRespostaToken(encodedToken, user);
+        }
+
+        private UsuarioLoginResponseModel ObterRespostaToken(string encodedToken, IdentityUser usuario)
+        {
+            return new UsuarioLoginResponseModel
+            {
+                Authenticated = true,
+                AccessToken = encodedToken,
+                ExpiresIn = TimeSpan.FromHours(_appSettings.ExpiracaoHoras).TotalHours,
+                UsuarioToken = new UsuarioResponseModel
+                {
+                    Id = Guid.Parse(usuario.Id),
+                    Email = usuario.Email,
+                }
+            };
         }
     }
 }

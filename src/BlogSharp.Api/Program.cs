@@ -56,15 +56,15 @@ builder.Services.AddSwaggerGen(c =>
      });
 });
 
-builder.Services.AddScoped<IAspnetUser, AspnetUser>();
-
 //builder.Services.AddDbContext<ApiDbContext>(options =>
 //{
 //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnetcion"));
 //});
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 builder.Services.AddDbContext<ApiDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnetcion")));
+    options.UseSqlite(connectionString));
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddRoles<IdentityRole>()
@@ -72,6 +72,10 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 var appSettingsSection = builder.Configuration.GetSection("AppSettings");
 builder.Services.Configure<AppSettings>(appSettingsSection);
+
+builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddScoped<IAspnetUser, AspnetUser>();
 
 var appSettings = appSettingsSection.Get<AppSettings>();
 var key = Encoding.ASCII.GetBytes(appSettings.Secret);
@@ -112,5 +116,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseDbMigrationHelper();
 
 app.Run();
