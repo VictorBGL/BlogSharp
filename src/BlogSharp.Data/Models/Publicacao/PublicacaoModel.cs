@@ -14,6 +14,7 @@ namespace BlogSharp.Data.Models
         public required string Descricao { get; set; }
 
         public string? Imagem { get; set; }
+        public string? ImagemAtual { get; set; }
         public IFormFile? ImagemFile { get; set; }
     }
 }

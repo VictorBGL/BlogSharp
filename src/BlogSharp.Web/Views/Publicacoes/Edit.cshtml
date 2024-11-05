@@ -89,6 +89,7 @@
     .image {
         height: 200px;
     }
+
 </style>
 
 <body>
@@ -106,6 +107,7 @@
         <h4>Preencha os dados</h4>
 
         <form asp-action="Edit" method="post" enctype="multipart/form-data" class="form-publicacao">
+            <input type="hidden" asp-for="ImagemAtual" value="@Model.Imagem" />
             <div class="form-group">
                 <label for="titulo">Título</label>
                 <input asp-for="Titulo" type="text" id="titulo" name="titulo" placeholder="Digite o título da publicação">
@@ -133,4 +135,5 @@
     document.querySelector('.btn-cancelar').addEventListener('click', function () {
         window.location.href = '/Publicacoes/Index';
     });
+
 </script>

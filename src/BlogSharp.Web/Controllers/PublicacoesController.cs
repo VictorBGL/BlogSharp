@@ -108,6 +108,10 @@ namespace BlogSharp.Web.Controllers
 
                 model.Imagem = uniqueFileName;
             }
+            else
+            {
+                model.Imagem = model.ImagemAtual;
+            }
 
             var publicacao = _mapper.Map<Publicacao>(model);
 
